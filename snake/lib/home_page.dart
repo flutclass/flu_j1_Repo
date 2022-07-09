@@ -17,6 +17,7 @@ enum snake_Direction { UP, DOWN, LEFT, RIGHT }
 
 class _HomePageState extends State<HomePage> {
   int RowSize = 10;
+  int currentScore = 0;
   int TotalNumberOFSquares = 100;
   List<int> snakePos = [0, 1, 2];
   var currentDirection = snake_Direction.RIGHT;
@@ -26,6 +27,21 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         moveSnake();
 
+        if(gameover()){
+
+
+          print('game over');
+          timer.cancel();
+          // ue peugham ham neshon midim
+          showDialog(context: context, builder: (context){
+            return AlertDialog(
+                  title: Text('Game over'),
+                  content: Text('your current score is ' + currentScore.toString() ) ,
+
+            );
+          });
+        }
+
 
         // snakePos.add(snakePos.last + 1);
         // print(snakePos.first);
@@ -34,9 +50,11 @@ class _HomePageState extends State<HomePage> {
     });
   }
 void  eatFood(){
+    currentScore++;
 while(snakePos.contains(foodPos)){
   foodPos = Random().nextInt(TotalNumberOFSquares);
 }
+
 }
   void moveSnake() {
     switch (currentDirection) {
@@ -55,11 +73,11 @@ while(snakePos.contains(foodPos)){
       case snake_Direction.LEFT:
         {
           if (snakePos.last % RowSize == 0) {
-            snakePos.add(snakePos.last - 1 - RowSize) ;
+            snakePos.add(snakePos.last - 1 + RowSize) ;
 
           }
           else{
-            snakePos.add(snakePos.last -1) ;
+            snakePos.add(snakePos.last - 1) ;
           }
 
         }
@@ -78,7 +96,7 @@ while(snakePos.contains(foodPos)){
         break;
       case snake_Direction.DOWN:
         {
-          if(snakePos.last + RowSize < RowSize) {
+          if(snakePos.last + RowSize > TotalNumberOFSquares) {
             snakePos.add(snakePos.last + RowSize - TotalNumberOFSquares);
 
           }
@@ -96,17 +114,44 @@ while(snakePos.contains(foodPos)){
       snakePos.removeAt(0);
     }
   }
+  bool gameover() {
+    // zamani ke dar postion adad tekrari dashte bashim bakhtim
+    List<int> snakeBody = snakePos.sublist(0,snakePos.length -1 );
+    if(snakeBody.contains(snakePos.last)){
+      return true;
+    }
 
+      return false;
+
+  }
   @override
   Widget build(BuildContext context) {
     return Column(
+
       children: [
 // high score
-        Expanded(
-          child: Container(
-// color: Colors.blue,
+          Expanded(
+            child: SafeArea(
+
+              child: Container(
+                margin: EdgeInsets.only(top: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      children: [
+                        Text('current Score'),
+                        Text(currentScore.toString(),style: TextStyle(
+                            fontSize: 36
+                        ),)
+                      ],
+                    ),
+
+                  ],
+                    ),
               ),
-        ),
+            ),
+          ),
 //game grid
         Expanded(
           flex: 3,
@@ -159,4 +204,6 @@ while(snakePos.contains(foodPos)){
       ],
     );
   }
+
+
 }
