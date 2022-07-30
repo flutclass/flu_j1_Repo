@@ -9,6 +9,7 @@ import '../constants.dart';
 import 'result_page.dart';
 import '../components/bottom_button.dart';
 import '../components/round_icon_button.dart';
+import 'package:bmi_cal_full/calculator.dart';
 enum Gender { male, female }
 
 class InputPage extends StatefulWidget {
@@ -23,6 +24,7 @@ class _InputPageState extends State<InputPage> {
   int height = 180;
   int weight = 60;
   int age = 20;
+  bool _isFinished = false;
   // void updateColor(Gender selectedgender){
   //   if(selectedgender==Gender.male){
   //     if(MalecardColor==inactive_cardcolor){
@@ -213,17 +215,81 @@ class _InputPageState extends State<InputPage> {
                 ],
               ),
             ),
-            BottomButton(
-              buttonTitle: "Calculate",
-              onTap: (){
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => Result_page(),
-                  ),
-                );
-              },
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: SwipeableButtonView(
+                isFinished: _isFinished,
+                onFinish: () async  {
+
+                  Calculator Calc = Calculator(height: height, weight: weight);
+                  await Navigator.push(context, PageTransition(child: Result_page(
+                    bmiResult: Calc.CalculateBMI(),
+                    resultText: Calc.getResult(),
+                    resultDetail: Calc.getDetail(),
+                  )
+                      , type: PageTransitionType.fade));
+                  setState(() {
+                    _isFinished = false;
+                  });
+
+                },
+                onWaitingProcess: (){
+                  Future.delayed(Duration(seconds: 1),(){
+                    setState(() {
+                      _isFinished=true;
+                    });
+                  });
+                },
+                activeColor: Color(0xFF586c5c),
+                buttonWidget: Icon(Icons.arrow_forward,color: Colors.black),
+                buttonText: "CALCULATE",
+              ),
+              // child: SlideAction(
+              //   borderRadius: 12,
+              //   elevation: 0,
+              //   innerColor: Color(0xFF586c5c),
+              //   outerColor: Color(0xFFa9af90),
+              //   sliderButtonIcon: Icon(
+              //     Icons.arrow_forward,
+              //     color: Colors.white,
+              //   ),
+              //   text: "CALCULATE",
+              //   textStyle: TextStyle(
+              //       color: Color(0xFFF7EDDB),
+              //       fontSize: 20
+              //   ),
+              //   onSubmit: (){
+              //     Calculator Calc = Calculator(height: height, weight: weight);
+              //         Navigator.push(
+              //           context,
+              //           MaterialPageRoute(
+              //             builder: (context) => Result_page(
+              //               bmiResult: Calc.CalculateBMI(),
+              //               resultText: Calc.getResult(),
+              //               resultDetail: Calc.getDetail(),
+              //             ),
+              //           ),
+              //         );
+              //
+              //   },
+              // ),
             )
+            // BottomButton(
+            //   buttonTitle: "Calculate",
+            //   onTap: (){
+            //     Calculator Calc = Calculator(height: height, weight: weight);
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (context) => Result_page(
+            //           bmiResult: Calc.CalculateBMI(),
+            //           resultText: Calc.getResult(),
+            //           resultDetail: Calc.getDetail(),
+            //         ),
+            //       ),
+            //     );
+            //   },
+            // )
           ],
         ));
   }

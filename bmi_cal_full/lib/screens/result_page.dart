@@ -4,7 +4,12 @@ import '../components/reusable_card.dart';
 import '../components/bottom_button.dart';
 
 class Result_page extends StatelessWidget {
-  const Result_page({Key? key}) : super(key: key);
+      Result_page({required this.bmiResult, required this.resultText,
+      required this.resultDetail });
+      final String bmiResult;
+      final String resultText;
+      final String resultDetail;
+  // const Result_page({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,9 +37,9 @@ class Result_page extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text('Normal', style: resultTextStyle),
-                  Text('18', style: KNumberTextStyle),
-                  Text('شما خیلی لاغری خوش به حالت', style: KbodyTextStyle),
+                  Text(resultText, style: resultTextStyle),
+                  Text(bmiResult, style: KNumberTextStyle),
+                  Text(resultDetail, style: KbodyTextStyle,textAlign: TextAlign.center,),
                 ],
               ),
             ),
