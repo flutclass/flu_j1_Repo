@@ -19,6 +19,10 @@ class Login_Page extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
 
             children: [
+              Icon(Icons.android,
+                size: 100,
+
+              ),
               SizedBox(
                 height: 25,
               ),
