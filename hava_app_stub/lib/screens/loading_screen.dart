@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:hava_app_stub/screens/location_screen.dart';
 import 'dart:convert';
 import 'package:http/http.dart'as http;
+import 'package:hava_app_stub/services/location.dart';
+import 'package:hava_app_stub/services/networking.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:hava_app_stub/services/weather.dart';
+const api_key = '7863fcfa97fb15bab2ed87005549acf4';
+
 
 
 class LoadingScreen extends StatefulWidget {
@@ -11,68 +18,86 @@ class LoadingScreen extends StatefulWidget {
 
 class _LoadingScreenState extends State<LoadingScreen> {
 
+  // double? longitude;
+  // double? latitude;
+
   Position? _postion;
   @override
   void initState() {
     super.initState();
-    _getCurrentLocation();
-    getData();
+    getLocation();
+    // _getCurrentLocation();
+    // getData();
   }
-  void getData() async{
-    http.Response response =
-    await http.get(Uri.parse('https://api.openweathermap.org/data/2.5/weather?q=London&appid=7863fcfa97fb15bab2ed87005549acf4'));
-    // print(response.body);
-    if(response.statusCode ==200){
-      String data = response.body;
-      var WeatherDescription = jsonDecode(data)['weather'][0]['description'];
-      print(WeatherDescription);
+  // void getData() async{
+  //   http.Response response =
+  //   await http.get(Uri.parse('https://api.openweathermap.org/data/2.5/weather?q=London&appid=7863fcfa97fb15bab2ed87005549acf4'));
+  //   print(response.body);
+  //   if (response.statusCode ==200){
+  //     String data = response.body;
+  //
+  //     var temperature = jsonDecode(data)['main']['temp'];
+  //     var condition = jsonDecode(data) ['weather'][0]['id'];
+  //     var cityName = jsonDecode(data)['name'];
+  //     print(temperature);
+  //     print(condition);
+  //     print(cityName);
+  //
+  //     // var longtiude = jsonDecode(data)['coord']['lon'];
+  //     // var WeatherDescription = jsonDecode(data)['weather'][0]['description'];
+  //     // print(WeatherDescription);
+  //     // print(longtiude);
+  //
+  //
+  //   }
+  //   else{
+  //     print(response.statusCode);
+  //   }
+  //
+  // }
 
-    }
-    else{
-      print(response.statusCode);
-    }
+void getLocation() async {
 
-  }
-  void _getCurrentLocation() async{
-    Position postion = await _determinPostion();
-    setState(() {
-      _postion = postion;
-    });
-    print(_postion);
-  }
-  Future<Position> _determinPostion() async{
-    LocationPermission permission;
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied){
-      permission = await Geolocator.requestPermission();
-      if(permission == LocationPermission.denied){
-        return Future.error(" Location permistions are denied");
-      }
-    }
-    return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.low);
-  }
+  var weatherData = await WeatherModel().getLocationWeather();
+   // print(weatherData);
+   Navigator.push(context, MaterialPageRoute(builder: (context){
+     return LocationScreen(
+       locationWeather: weatherData,
+     );
+   }));
 
-
+}
 
 
   @override
   Widget build(BuildContext context) {
-    String myMargin = 'abc';
-    double myMarginAsDouble =30.0;
-    try{
-       myMarginAsDouble = double.parse(myMargin);
 
-    }
-    catch(ex){
-      myMarginAsDouble = 50;
 
-    }
     return Scaffold(
-      body: Container(
-        margin: EdgeInsets.all(myMarginAsDouble),
-        color: Colors.red,
+      body: Center(
+child:SpinKitDoubleBounce(
+  color: Colors.white,
+  size: 100.0,
+) ,
       ),
     );
+    // String myMargin = 'abc';
+    // double? myMarginAsDouble ;
+    // try{
+    //    myMarginAsDouble = double.parse(myMargin);
+    //
+    // }
+    // catch(ex){
+    //   print(ex);
+    //   // myMarginAsDouble = 50;
+    //
+    // }
+    // return Scaffold(
+    //   body: Container(
+    //     margin: EdgeInsets.all(myMarginAsDouble ?? 50),
+    //
+    //   ),
+    // );
 
   }
 }

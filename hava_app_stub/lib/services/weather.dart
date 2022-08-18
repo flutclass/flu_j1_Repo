@@ -1,4 +1,37 @@
+import 'package:hava_app_stub/services/location.dart';
+import 'package:hava_app_stub/services/networking.dart';
+const api_key ='7863fcfa97fb15bab2ed87005549acf4';
+const openWetherMapURL =  'https://api.openweathermap.org/data/2.5/weather';
+
+
+
 class WeatherModel {
+
+
+  Future<dynamic> GetCityweather(String CityName) async{
+    var url = '${openWetherMapURL}?q=${CityName}&appid=${api_key}&units=metric';
+    NetworkHelper networkHelper = await NetworkHelper(url: url);
+    var weatherData = networkHelper.getData();
+    print(weatherData);
+    return weatherData;
+  }
+
+
+  Future<dynamic> getLocationWeather() async {
+    Location location = Location();
+    await location.getCurrentLocation();
+
+    NetworkHelper networkHelper = NetworkHelper(
+        url: '${openWetherMapURL}?lat=${location
+            .latitude}&lon=${location.longitude}&appid=${api_key}&units=metric');
+    var weatherData = await networkHelper.getData();
+    // print(weatherData);
+    return weatherData;
+  }
+
+
+
+
   String getWeatherIcon(int condition) {
     if (condition < 300) {
       return '🌩';
