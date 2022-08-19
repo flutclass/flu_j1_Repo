@@ -27,6 +27,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+   resizeToAvoidBottomInset: false,
       backgroundColor: Colors.grey[900],
       appBar: AppBar(
         elevation: 0,
@@ -91,7 +92,7 @@ class _HomePageState extends State<HomePage> {
             scrollDirection: Axis.horizontal,
             children: [
               CoffeeTile(
-                  CoffeeImagePath:'assets/cuppochino.jpg',
+                  CoffeeImagePath:'assets/black.jpg',
                   CoffeeName:'Cappuccino',
                   CoffeePrice: '24',
               ),
