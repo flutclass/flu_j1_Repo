@@ -8,6 +8,10 @@ const openWetherMapURL =  'https://api.openweathermap.org/data/2.5/weather';
 class WeatherModel {
 
 
+
+
+
+
   Future<dynamic> GetCityweather(String CityName) async{
     var url = '${openWetherMapURL}?q=${CityName}&appid=${api_key}&units=metric';
     NetworkHelper networkHelper = await NetworkHelper(url: url);
@@ -30,6 +34,28 @@ class WeatherModel {
   }
 
 
+
+String getImageUrl(int condition){
+  if (condition < 300) {
+    return 'Thunderstorm.jpg';
+  } else if (condition < 400) {
+    return 'heavyRain.jpg';
+  } else if (condition < 600) {
+    return 'lightRain.jpg';
+  } else if (condition < 700) {
+    return 'snow.jpg';
+  } else if (condition < 800) {
+    return 'fog.jpg';
+  } else if (condition == 800) {
+    return 'clearSky.jpg';
+  } else if (condition <= 804) {
+    return 'clouds.jpg';
+  } else {
+    return '🤷‍';
+  }
+
+
+}
 
 
   String getWeatherIcon(int condition) {
@@ -61,6 +87,7 @@ class WeatherModel {
       return 'You\'ll need 🧣 and 🧤';
     } else {
       return 'Bring a 🧥 just in case';
+
     }
   }
 }

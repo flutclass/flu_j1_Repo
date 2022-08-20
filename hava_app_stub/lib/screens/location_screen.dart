@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hava_app_stub/screens/city_screen.dart';
 import 'package:hava_app_stub/services/weather.dart';
 import 'package:hava_app_stub/utilities/constants.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LocationScreen extends StatefulWidget {
   LocationScreen({required this.locationWeather});
@@ -19,6 +20,7 @@ class _LocationScreenState extends State<LocationScreen> {
   String CityName = "";
   String weatherIcon = "";
   String weatherMessage = "";
+  String ImageUrl = "";
   @override
   void initState() {
     // TODO: implement initState
@@ -37,6 +39,7 @@ class _LocationScreenState extends State<LocationScreen> {
     CityName = weatherData['name'];
     weatherIcon = weather.getWeatherIcon(condition);
     weatherMessage = weather.getMessage(Tempreture);
+    ImageUrl = weather.getImageUrl(condition);
     });
   }
 
@@ -46,7 +49,7 @@ class _LocationScreenState extends State<LocationScreen> {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('images/location_background.jpg'),
+            image: AssetImage('images/${ImageUrl}'),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
                 Colors.white.withOpacity(0.8), BlendMode.dstATop),
@@ -55,7 +58,7 @@ class _LocationScreenState extends State<LocationScreen> {
         constraints: BoxConstraints.expand(),
         child: SafeArea(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            // mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Row(
@@ -95,28 +98,49 @@ class _LocationScreenState extends State<LocationScreen> {
                   ),
                 ],
               ),
+              SizedBox(height: 120),
+
+
+
+
+
               Padding(
                 padding: EdgeInsets.only(left: 15.0),
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      '${Tempreture}°',
-                      style: kTempTextStyle,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: <Widget>[
+                        Text(
+                          '${Tempreture}°',
+                          style: GoogleFonts.lato(
+                            fontSize: 80,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white
+                          ),
+                        ),
+                        Text(
+                          '${weatherIcon}️',
+                          style: kConditionTextStyle,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
                     ),
                     Text(
-                      '${weatherIcon}️',
-                      style: kConditionTextStyle,
+                      '${CityName} ',
+                      textAlign: TextAlign.right,
+                      style: KCityLabelTextStyle,
+
                     ),
                   ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(right: 15.0),
-                child: Text(
-                  '${weatherMessage}   in ${CityName}',
-                  textAlign: TextAlign.right,
-                  style: kMessageTextStyle,
-                ),
+              Text(
+                ' ',
+                textAlign: TextAlign.center,
+                style: kMessageTextStyle,
               ),
             ],
           ),

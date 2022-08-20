@@ -6,10 +6,14 @@ const kTempTextStyle = TextStyle(
 );
 
 const kMessageTextStyle = TextStyle(
-  fontFamily: 'Spartan MB',
-  fontSize: 60.0,
+  fontFamily: 'IranYekan',
+  fontSize: 30.0,
 );
 
+const KCityLabelTextStyle = TextStyle(
+  fontFamily: 'IranYekan',
+  fontSize: 60.0,
+);
 const kButtonTextStyle = TextStyle(
   fontSize: 30.0,
   fontFamily: 'Spartan MB',
