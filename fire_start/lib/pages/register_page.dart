@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fire_start/pages/forget_password.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,14 +16,49 @@ class _RegisterPageState extends State<RegisterPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final _firstNameController = TextEditingController();
+  final _lastNameController = TextEditingController();
+  final _ageController = TextEditingController();
+
 
   Future signUp() async{
-    await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _emailController.text.trim(), password: _passwordController.text.trim());
+
+    if(passwordConfirmed()){
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(email: _emailController.text.trim(), password: _passwordController.text.trim());
+    }
+  AddUserDetails(_firstNameController.text.trim(), _lastNameController.text.trim(), _emailController.text.trim(), int.parse(_ageController.text.trim()));
+  }
+
+  Future AddUserDetails (String firstName , String lastName, String email , int age)async{
+    await FirebaseFirestore.instance.collection('users').add({
+      'FirstName':firstName,
+      'LastName':lastName,
+      'age':age,
+      'email':email
+    });
+    
+  }
+  
+  
+
+
+  bool passwordConfirmed (){
+    if(_passwordController.text.trim() == _confirmPasswordController.text.trim()){
+      return true;
+    }
+    else{
+      return false;
+    }
+
+
   }
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _ageController.dispose();
     // TODO: implement dispose
     super.dispose();
   }
@@ -80,6 +117,84 @@ class _RegisterPageState extends State<RegisterPage> {
                     child: Padding(
                       padding:  EdgeInsets.only( left: 20.0),
                       child: TextField(
+                        controller: _firstNameController,
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "FirstName"
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric( horizontal: 25.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        border: Border.all(
+                            color: Colors.white
+                        ),
+                        borderRadius: BorderRadius.circular(9)
+                    ),
+                    child: Padding(
+                      padding:  EdgeInsets.only( left: 20.0),
+                      child: TextField(
+                        controller: _lastNameController,
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "LastName"
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric( horizontal: 25.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        border: Border.all(
+                            color: Colors.white
+                        ),
+                        borderRadius: BorderRadius.circular(9)
+                    ),
+                    child: Padding(
+                      padding:  EdgeInsets.only( left: 20.0),
+                      child: TextField(
+                        controller: _ageController,
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "Age"
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+
+
+                Padding(
+                  padding: const EdgeInsets.symmetric( horizontal: 25.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        border: Border.all(
+                            color: Colors.white
+                        ),
+                        borderRadius: BorderRadius.circular(9)
+                    ),
+                    child: Padding(
+                      padding:  EdgeInsets.only( left: 20.0),
+                      child: TextField(
                         controller: _emailController,
                         decoration: InputDecoration(
                             border: InputBorder.none,
@@ -115,6 +230,10 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                 ),
+
+
+
+
                 SizedBox(
                   height: 15,
                 ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:fire_start/pages/forget_password.dart';
 class Login_page extends StatefulWidget {
   final VoidCallback showRegisterPage;
   Login_page({required this.showRegisterPage});
@@ -15,8 +16,17 @@ class _Login_pageState extends State<Login_page> {
   final _passwordController = TextEditingController();
   Future signIn() async{
 
+    showDialog(context: context, builder: (context){
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    });
+
     await FirebaseAuth.instance.signInWithEmailAndPassword(email: _emailController.text.trim(),
         password: _passwordController.text.trim());
+
+
+    Navigator.of(context).pop();
   }
 
   @override
@@ -118,6 +128,31 @@ class _Login_pageState extends State<Login_page> {
                     ),
                   ),
                 ),
+                SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric( horizontal: 25.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      GestureDetector(
+                        onTap:(){
+                          Navigator.push(context, MaterialPageRoute(builder: (context){
+                            return ForgetPasswordPage();
+                          }));
+                        },
+                        child: Text('Forget Password',style: TextStyle(
+                            fontWeight: FontWeight.w900,
+                            color: Colors.indigo
+                        ),),
+                      )
+                    ],
+                  ),
+                ),
+
+
+
                 SizedBox(
                   height: 15,
                 ),

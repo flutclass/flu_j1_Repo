@@ -1,6 +1,6 @@
 import 'package:fire_start/auth/auth_page.dart';
 import 'package:fire_start/home_page.dart';
-import 'package:fire_start/login_page.dart';
+import 'package:fire_start/pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
