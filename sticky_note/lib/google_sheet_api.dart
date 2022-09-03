@@ -24,15 +24,53 @@ class GoogleSheetApi {
 
 // Variables
 
-  static int numberOfTransactions = 0;
-  static List<List<dynamic>> currentTransactions = [];
+  static int numberOfNotes = 0;
+  static List<String> currentNotes = [];
   static bool loading = true;
   
   static Future init() async{
     final ss = await gsheets.spreadsheet(_id);
     _worksheet = ss.worksheetByTitle('WorkSheet1');
-    print('success');
+
+    if(_worksheet!=null){
+      print('success');
+    }
+   countRows();
+
   }
+
+  static Future insert(String note) async{
+    if(_worksheet==null) return;
+    numberOfNotes++;
+    currentNotes.add(note);
+    await _worksheet!.values.appendRow([note]);
+
+  }
+
+  static Future countRows() async{
+    while (
+    (await _worksheet!.values.value(column: 1, row: numberOfNotes+1)) !=''
+    ){
+      numberOfNotes++;
+    }
+    loadNotes();
+
+  }
+
+  static Future loadNotes() async{
+    if(_worksheet==null) return;
+    for (int i=0; i<numberOfNotes; i++){
+      final String newNote =
+          await _worksheet!.values.value(column: 1, row: i + 1);
+      if(currentNotes.length<numberOfNotes){
+        currentNotes.add(newNote);
+      }
+    }
+    loading = false;
+  }
+
+
+
   
   
 }
