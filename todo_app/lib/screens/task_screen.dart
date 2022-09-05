@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/model/task_data.dart';
 import 'package:todo_app/widgets/task_list.dart';
 import 'package:todo_app/screens/add_task_screen.dart';
 import 'package:todo_app/model/task.dart';
-class TaskScreen extends StatefulWidget {
-  const TaskScreen({Key? key}) : super(key: key);
+class TaskScreen extends StatelessWidget {
 
-  @override
-  State<TaskScreen> createState() => _TaskScreenState();
-}
-
-class _TaskScreenState extends State<TaskScreen> {
-  List<Task> tasks = [
-    Task(name: "buy milk", isDone: true),
-    Task(name: "buyEgg", isDone: false),
-    Task(name: "buy cake", isDone: true)
-
-  ];
+  // List<Task> tasks = [
+  //   Task(name: "buy milk", isDone: true),
+  //   Task(name: "buyEgg", isDone: false),
+  //   Task(name: "buy cake", isDone: true)
+  //
+  // ];
   // Widget BuildButtonSheet(BuildContext context){
   @override
   Widget build(BuildContext context) {
@@ -25,13 +21,13 @@ class _TaskScreenState extends State<TaskScreen> {
         child: Icon(Icons.add),
         onPressed: (){
           showModalBottomSheet(context: context, builder: (context) => AddTaskScreen(
-            callback: (newTaskTitle){
-              setState(() {
-                tasks.add(Task(name:newTaskTitle , isDone: false ));
-              });
-              Navigator.pop(context);
-              // print(newTaskTitle);
-            },
+            // callback: (newTaskTitle){
+            //   // setState(() {
+            //   //   tasks.add(Task(name:newTaskTitle , isDone: false ));
+            //   // });
+            //   Navigator.pop(context);
+            //   // print(newTaskTitle);
+            // },
           ));
         },
       ),
@@ -62,7 +58,7 @@ class _TaskScreenState extends State<TaskScreen> {
                 style: TextStyle(color: Colors.white,
                 fontSize: 50,
                 fontWeight: FontWeight.w700)),
-                Text("${tasks.length}Task",style: TextStyle(color: Colors.white,
+                Text("${Provider.of<TaskData>(context).taskCount}Task",style: TextStyle(color: Colors.white,
                 fontSize: 18)),
                 SizedBox(
                   height: 6,
@@ -79,7 +75,7 @@ class _TaskScreenState extends State<TaskScreen> {
                     topLeft: Radius.circular(20)
                 )
             ),
-            child: TaskList(tasks:tasks ),
+            child: TaskList(),
           ),),
         ],
       ),
