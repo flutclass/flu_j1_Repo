@@ -8,12 +8,23 @@ class TaskData extends ChangeNotifier{
     Task(name: "buy cake", isDone: true)
 
   ];
+
   int get taskCount{
     return tasks.length;
   }
   void AddTask(String newTaskTitle){
     final task = Task(name:newTaskTitle , isDone: false );
     tasks.add(task);
+    notifyListeners();
+  }
+
+  void UpdateTask(Task task){
+    task.toggleDone();
+    notifyListeners();
+  }
+
+  void deleteTask(Task task){
+    tasks.remove(task);
     notifyListeners();
   }
 
